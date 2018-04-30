@@ -6,8 +6,18 @@
 
 - Flow type
 - Jest testing
-- Backend with cloudfire
-- Api in node
+- Backend with Postgresql
+- Api in node express
+
+
+### To install
+
+`yarn install`
+`psql -f faves.sql`
+
+### To start
+
+`npm start`
 
 ### Data schema:
 
