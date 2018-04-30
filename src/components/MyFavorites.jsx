@@ -48,7 +48,7 @@ class MyFavorites extends React.Component {
   render() {
     return (
       <div>
-        { this.state.favoritesWithDetails.length === 0 ? (
+        { this.props.favorites.length === 0 ? (
           <p className="text--error text--bold">You haven't favorited any event yet!</p>
           ) : (
             this.state.favoritesWithDetails.map(favorite => {
@@ -62,7 +62,7 @@ class MyFavorites extends React.Component {
                   time={favorite.time}
                   rsvpCount={favorite.yes_rsvp_count}
                   rsvpers={favorite.rsvp_sample}
-                  isFavorited={true}
+                  isFavorited={this.props.favorites.includes(favorite.id)}
                   toggleFavorite={this.props.toggleFavorite}
                 />
               );

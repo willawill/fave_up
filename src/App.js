@@ -11,17 +11,18 @@ import _ from 'lodash';
 class App extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      meetups: [],
       query: 'javascript',
       loading: false,
       error: false,
       favorites: [],
+      meetups: [],
       showFavorites: false
     };
   }
 
-  fetchEvents = async (search_term) => {
+  fetchEvents = (search_term) => {
     this.setState({
       meetups: [],
       query: search_term,
@@ -78,6 +79,7 @@ class App extends Component {
     ]).catch(err => {
       console.error(err);
       this.setState({
+        meetups: [],
         favorites: [],
         loading: false,
         error: true
@@ -85,8 +87,8 @@ class App extends Component {
     });
   }
 
-  handleSubmit = async (query) => {
-    await this.fetchEvents(query);
+  handleSearch = (query) => {
+    this.fetchEvents(query);
   }
 
   toggleOnlyFavorites = () => {
@@ -149,7 +151,7 @@ class App extends Component {
     return (
       <div>
         <Header />
-        <SearchBar handleSubmit={this.handleSubmit} />
+        <SearchBar handleSearch={this.handleSearch} />
         <ToggleDisplay showFavorites={this.state.showFavorites} toggleOnlyFavorites={this.toggleOnlyFavorites} />
         <MeetupList
           favorites={this.state.favorites}

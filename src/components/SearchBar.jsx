@@ -5,36 +5,36 @@ import Button from 'meetup-web-components/lib/forms/Button';
 import PropTypes from 'prop-types';
 
 const SearchBar = (props) => {
-  let queryString = { value: '' };
+  let queryString = {value: ''};
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
-    props.handleSubmit(queryString.value);
+    props.handleSearch(queryString.value);
   }
 
   return (
     <Section>
-      <form onSubmit={handleSubmit}>
-      <div className="row bounds bounds--wide">
-        <div className="row-item chunk">
-          <input
-            id="query"
-            type="text"
-            name="query"
-            placeholder="Find some Meetups..."
-            ref={qs => queryString = qs}
-          />
+      <form>
+        <div className="row bounds bounds--wide">
+          <div className="row-item chunk">
+            <input
+              id="query"
+              type="text"
+              name="query"
+              placeholder="Find some Meetups..."
+              ref={qs => queryString = qs}
+            />
+          </div>
+          <div className="row-item chunk row-item--shrink">
+            <Button className="button--primary" onClick={handleSubmit}>Search</Button>
+          </div>
         </div>
-        <div className="row-item chunk row-item--shrink">
-          <Button className="button--primary">Search</Button>
-        </div>
-      </div>
       </form>
     </Section>
   )
 }
 
 SearchBar.propTypes = {
-  handleSubmit: PropTypes.func
+  handleSearch: PropTypes.func
 }
 export default SearchBar;
