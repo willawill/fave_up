@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import fetchJsonp from 'fetch-jsonp';
 import querystring from 'querystring';
-import meetup_logo from './meetup_logo.svg';
 import './App.css';
 import styled from 'styled-components';
+import SearchBar from './components/SearchBar';
+import Header from './components/Header';
 import Meetups from './components/Meetups';
 import Bounds from 'meetup-web-components/lib/layout/Bounds';
 import Section from 'meetup-web-components/lib/layout/Section';
@@ -89,9 +90,8 @@ class App extends Component {
     });
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.fetchEvents(document.getElementById('query').value);
+  handleSubmit = async (query) => {
+    await this.fetchEvents(query);
   }
 
   toggleOnlyFavorites = () => {
@@ -153,29 +153,8 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Section>
-          <Bounds className="align--center">
-            <img src={meetup_logo} className="logo" alt="logo" />
-          </Bounds>
-        </Section>
-
-        <Section>
-          <form onSubmit={this.handleSubmit}>
-            <div className="row bounds bounds--wide">
-              <div className="row-item chunk">
-                <input
-                  id="query"
-                  type="text"
-                  name="query"
-                  placeholder="Find some Meetups..."
-                />
-              </div>
-              <div className="row-item chunk row-item--shrink">
-                <Button className="button--primary">Search</Button>
-              </div>
-            </div>
-          </form>
-        </Section>
+        <Header />
+        <SearchBar handleSubmit={this.handleSubmit} />
         <Section>
           <ToggleFavoriteView onClick={this.toggleOnlyFavorites}>
             Click here to see { this.state.showFavorites ? 'search results' : 'favorites only'}
