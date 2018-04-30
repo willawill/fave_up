@@ -247,5 +247,6 @@ const ToggleFavoriteView = styled.a`
   padding-left: 100px;
   cursor: pointer;
 `;
+ToggleFavoriteView.DisplayName = 'ToggleFavoriteView';
 
 export default App;

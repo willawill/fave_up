@@ -15,7 +15,7 @@ class MyFavorites extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.favorites.length == 0) {
+    if (this.props.favorites.length === 0) {
       return;
     }
     debugger
@@ -51,7 +51,7 @@ class MyFavorites extends React.Component {
           My Favorites
         </h1>
         <div>
-          {favoritesWithDetails.length == 0 ? (
+          {favoritesWithDetails.length === 0 ? (
             <p className="text--error text--bold">
               You haven't favorited any event yet!
             </p>

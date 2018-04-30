@@ -8,6 +8,7 @@
     "concurrently": "^3.5.1",
     "express": "^4.16.3",
     "fetch-jsonp": "^1.0.6",
+    "jest-cli": "^22.4.3",
     "meetup-web-components": "^4.6.1990",
     "moment": "^2.18.1",
     "nodemon": "^1.17.3",
@@ -66,7 +67,7 @@
   },
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "nodemon server/index.js",
+    "server": "nodemon server/index.js --tace",
     "client": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom"
