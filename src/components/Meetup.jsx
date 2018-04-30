@@ -8,7 +8,7 @@ import InlineBlockList from "meetup-web-components/lib/layout/InlineBlockList";
 import AvatarMember from "meetup-web-components/lib/media/AvatarMember";
 import FavoriteButton from './FavoriteButton';
 
-const Meetup = props => {
+const Meetup = (props) => {
   const date = moment(new Date(props.time)).format("h:mmA, dddd");
   const rsvpers =
     props.rsvpers.length >= 5 ? props.rsvpers.slice(0, 5) : props.rsvpers;

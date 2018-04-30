@@ -4,7 +4,7 @@ import Bounds from 'meetup-web-components/lib/layout/Bounds';
 import Section from 'meetup-web-components/lib/layout/Section';
 import meetup_logo from '../meetup_logo.svg';
 
-const  Header = (props) => {
+const Header = (props) => {
   return (
     <Section>
       <Bounds className="align--center">

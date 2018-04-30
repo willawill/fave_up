@@ -11,15 +11,18 @@ class MyFavorites extends React.Component {
 
     this.state = {
       favoritesWithDetails: []
-    }
+    };
   }
 
   componentDidMount() {
     if (this.props.favorites.length === 0) {
       return;
     }
-    debugger
-    const params = querystring.stringify({
+    this.updateFavorites();
+  }
+
+   updateFavorites() {
+     const params = querystring.stringify({
       event_id: this.props.favorites.join(','),
       fields: 'rsvp_sample',
       page: '15',
@@ -32,7 +35,7 @@ class MyFavorites extends React.Component {
       .then(json =>
         this.setState({
           favoritesWithDetails: json.results
-        })
+        })        
       )
       .catch(err => {
         console.error(err);
@@ -40,23 +43,15 @@ class MyFavorites extends React.Component {
           favoritesWithDetails: []
         });
       });
-      
-    }
+   } 
 
   render() {
-    const {favoritesWithDetails} = this.state;
     return (
       <div>
-        <h1 className="text--display1 margin--bottom">
-          My Favorites
-        </h1>
-        <div>
-          {favoritesWithDetails.length === 0 ? (
-            <p className="text--error text--bold">
-              You haven't favorited any event yet!
-            </p>
+        { this.state.favoritesWithDetails.length === 0 ? (
+          <p className="text--error text--bold">You haven't favorited any event yet!</p>
           ) : (
-            favoritesWithDetails.map(favorite => {
+            this.state.favoritesWithDetails.map(favorite => {
               return (
                 <Meetup
                   id={favorite.id}
@@ -73,11 +68,9 @@ class MyFavorites extends React.Component {
               );
             })
           )
-          }
-        </div>
+        }
       </div>
     );
-
   }
 }
 

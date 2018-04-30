@@ -7,14 +7,14 @@ chai.use(require('chai-http'));
 const app = require('../server/index.js');
 
 describe('API endpoint /favorites', () => {
-  it('returns all the favorites for an user', (done) => {
-    chai.request(app)
+  it('returns all the favorites for an user', () => {
+    return chai.request(app)
       .get('/favorites?userId=2')
       .then(res => {
         expect(res).to.have.status(200);
         expect(res).to.be.json;
         expect(res.body).to.be.an('object');
-      }).then(done, done)
+      })
   })
 })
 

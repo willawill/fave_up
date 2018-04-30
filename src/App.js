@@ -2,14 +2,10 @@ import React, { Component } from 'react';
 import fetchJsonp from 'fetch-jsonp';
 import querystring from 'querystring';
 import './App.css';
-import styled from 'styled-components';
 import SearchBar from './components/SearchBar';
+import ToggleDisplay from './components/ToggleDisplay';
 import Header from './components/Header';
-import Meetups from './components/Meetups';
-import Bounds from 'meetup-web-components/lib/layout/Bounds';
-import Section from 'meetup-web-components/lib/layout/Section';
-import Button from 'meetup-web-components/lib/forms/Button';
-import MyFavorites from './components/MyFavorites';
+import MeetupList from './components/MeetupList';
 import _ from 'lodash';
 
 class App extends Component {
@@ -25,7 +21,7 @@ class App extends Component {
     };
   }
 
-  fetchEvents = (search_term) => {
+  fetchEvents = async (search_term) => {
     this.setState({
       meetups: [],
       query: search_term,
@@ -43,12 +39,11 @@ class App extends Component {
     });
 
     const apiUrl = `https://api.meetup.com/2/open_events/?${qs}`;
-    const self = this;
 
     fetchJsonp(apiUrl)
       .then(response => response.json())
       .then(json =>
-        self.setState({
+        this.setState({
           meetups: json.results,
           query: search_term,
           loading: false,
@@ -155,67 +150,19 @@ class App extends Component {
       <div>
         <Header />
         <SearchBar handleSubmit={this.handleSubmit} />
-        <Section>
-          <ToggleFavoriteView onClick={this.toggleOnlyFavorites}>
-            Click here to see { this.state.showFavorites ? 'search results' : 'favorites only'}
-          </ToggleFavoriteView>
-        </Section>
-        { this.state.showFavorites ? (
-          <Section>
-            <Bounds>
-              <MyFavorites
-                favorites={this.state.favorites}
-                toggleFavorite={this.toggleFavorite} />
-            </Bounds>
-          </Section>
-        ) : (
-        <Section>
-          <Bounds>
-            <FavoritesCount>
-              My Favorites ({this.state.favorites.length})
-            </FavoritesCount>
-
-            <h1 className="text--display1 margin--bottom">
-              {this.state.query} Meetups
-            </h1>
-            {this.state.error ? (
-              <p className="text--error text--bold">
-                Looks like something went wrong…
-              </p>
-            ) : (
-              ''
-            )}
-            {this.state.loading ? (
-              <div className="loader">Loading...</div>
-            ) : (
-              <Meetups
-                query={this.state.query}
-                error={this.state.error}
-                meetups={this.state.meetups}
-                favorites={this.state.favorites}
-                toggleFavorite={this.toggleFavorite}
-              />
-            )}
-          </Bounds>
-        </Section>
-      )}
+        <ToggleDisplay showFavorites={this.state.showFavorites} toggleOnlyFavorites={this.toggleOnlyFavorites} />
+        <MeetupList
+          favorites={this.state.favorites}
+          toggleFavorite={this.toggleFavorite}
+          meetups={this.state.meetups}
+          error={this.state.error}
+          loading={this.state.loading}
+          query={this.state.query}
+          showFavorites={this.state.showFavorites}
+        />
     </div>
     );
   }
 }
-
-const FavoritesCount = styled.div`
-  position: absolute;
-  right: 50px;
-  margin-bottom: 20px;
-`;
-FavoritesCount.DisplayName = 'FavoritesCount';
-
-const ToggleFavoriteView = styled.a`
-  color: #00a2c7;
-  padding-left: 100px;
-  cursor: pointer;
-`;
-ToggleFavoriteView.DisplayName = 'ToggleFavoriteView';
 
 export default App;

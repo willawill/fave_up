@@ -13,6 +13,7 @@
 ### To install
 
 `yarn install`
+
 `psql -f faves.sql`
 
 ### To start
@@ -38,12 +39,11 @@
 
 ### UI components
 1. Add Favorite Button.
-2. Delete favorite button.
-3. Favorite in the nav bar with a number e.g. Favorites (5).
-4. My Favorites in the nav bar.
-
+2. Delete favorite Button.
+3. Favorite in the nav bar with a number e.g. My Favorites (5).
+4. Toggle between Search Result vs Favorites
 
 Improvement:
 1. Use tools like knex.js to be flexible with database
-2. Add end to end test
-3. Add flow 
+2. Abstract backend with data layer and server layer rather than calling queries directly.
+3. Add flow.
