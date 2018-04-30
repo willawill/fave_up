@@ -10,8 +10,8 @@ it('renders the search bar', () => {
 
 it('triggers the handleSubmit', () => {
   const handleSubmitMock = jest.fn();
-  const wrapper = shallow(<SearchBar handleSubmit={handleSubmitMock} />);
+  const wrapper = shallow(<SearchBar handleSearch={handleSubmitMock} />);
   
-  wrapper.find('form').simulate('submit', { preventDefault: e => {}});
+  wrapper.find('Button').simulate('click', { preventDefault: e => {}});
   expect(handleSubmitMock.mock.calls.length).toBe(1);
 })
