@@ -9,9 +9,8 @@ const Meetups = props => {
         <p className="list-item text--error text--bold">
           We couldn't find anything matching {props.query}!
         </p>
-      ) : (
-        ""
-      )}
+      ) : ("")
+      }
       {props.meetups.map(meetup => {
         return (
           <Meetup

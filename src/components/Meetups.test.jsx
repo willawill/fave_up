@@ -1,7 +1,7 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import TestUtils from "react-dom/test-utils";
+import { shallow } from 'enzyme';
 import Meetups from "./Meetups.jsx";
+import Meetup from "./Meetup.jsx";
 
 const MEETUPS = [
   {
@@ -9,6 +9,7 @@ const MEETUPS = [
     group: {
       name: "Some Meetup"
     },
+    id: 1,
     created: 1506008725,
     time: 1506008726,
     rsvpCount: 55,
@@ -19,6 +20,7 @@ const MEETUPS = [
     group: {
       name: "Some Other Meetup"
     },
+    id: 2,
     created: 1506008727,
     time: 1506008728,
     rsvpCount: 2,
@@ -48,33 +50,17 @@ const PEOPLE = [
 ];
 
 it("renders no meetups", () => {
-  const component = TestUtils.renderIntoDocument(
-    <Meetups meetups={[]} errors={false} query="" />
+  const component = shallow(
+    <Meetups meetups={[]} errors={false} />
   );
-  const meetupsEl = TestUtils.scryRenderedDOMComponentsWithClass(
-    component,
-    "text--error"
-  );
-  expect(meetupsEl).toHaveLength;
+  const meetupsEl = component.find(".text--error");
+  expect(meetupsEl.length).toEqual(1);
 });
+
 it("renders meetups", () => {
-  const component = TestUtils.renderIntoDocument(
-    <Meetups meetups={MEETUPS} errors={false} query="whatev" />
+  const component = shallow(
+    <Meetups meetups={MEETUPS} errors={false} favorites={[]} query="whatev" />
   );
-  const meetupsEl = TestUtils.scryRenderedDOMComponentsWithClass(
-    component,
-    "list-item"
-  );
-  expect(meetupsEl).toHaveLength;
-});
-it("renders meetups with RSVPers", () => {
-  MEETUPS[1].rsvp_sample = PEOPLE;
-  const component = TestUtils.renderIntoDocument(
-    <Meetups meetups={MEETUPS} errors={false} query="whatev" />
-  );
-  const meetupsEl = TestUtils.scryRenderedDOMComponentsWithClass(
-    component,
-    "avatar--person"
-  );
-  expect(meetupsEl).toHaveLength;
+  const meetupsEl = component.find("Meetup");
+  expect(meetupsEl.length).toEqual(MEETUPS.length);
 });
