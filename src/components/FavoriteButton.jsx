@@ -16,7 +16,8 @@ FavoriteButton.propTypes = {
 };
 
 const ActionButton = styled(Button)`
-  background-color: ${props => props.isFavorited ? 'grey' : 'red'};
+  background-color: ${props => props.isFavorited ? '#294d6b' : '#f13a59'};
+  color: white;
   display: inline-block;
   position: absolute;
   right: 50px;

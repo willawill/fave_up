@@ -160,12 +160,6 @@ class App extends Component {
     })
   }
 
-  favoritesWithDetails() {
-    return _.filter(this.state.meetups, (mu) => {
-      return this.state.favorites.includes(mu.id);
-    })
-  }
-
 	render() {
 		return (
 			<div>
@@ -201,7 +195,7 @@ class App extends Component {
           <Section>
             <Bounds>
               <MyFavorites
-                favorites={this.favoritesWithDetails()}
+                favorites={this.state.favorites}
                 toggleFavorite={this.toggleFavorite} />
             </Bounds>
           </Section>
@@ -251,6 +245,7 @@ FavoritesCount.DisplayName = 'FavoritesCount';
 const ToggleFavoriteView = styled.a`
   color: #00a2c7;
   padding-left: 100px;
+  cursor: pointer;
 `;
 
 export default App;
