@@ -3,6 +3,7 @@ import fetchJsonp from 'fetch-jsonp';
 import querystring from 'querystring';
 import meetup_logo from './meetup_logo.svg';
 import './App.css';
+import styled from 'styled-components';
 import Meetups from './components/Meetups';
 import Bounds from 'meetup-web-components/lib/layout/Bounds';
 import Section from 'meetup-web-components/lib/layout/Section';
@@ -18,7 +19,8 @@ class App extends Component {
 			query: 'javascript',
 			loading: false,
 			error: false,
-      favorites: []
+      favorites: [],
+      showFavorites: false
 		};
 	}
 
@@ -63,7 +65,7 @@ class App extends Component {
 			});
 	}
 
-// TODO fix the userId
+// TODO fix the userId when there is an user system, now the userID is hardcoded to be 1.
 	fetchFavorites = () => {
     const favoritesURL = 'favorites?userId=1';
     this.setState({
@@ -101,6 +103,11 @@ class App extends Component {
 		e.preventDefault();
 		this.fetchEvents(document.getElementById('query').value);
 	}
+
+  toggleOnlyFavorites = () => {
+    const newMode = !this.state.showFavorites;
+    this.setState({showFavorites: newMode});
+  }
 
   toggleFavorite = (eventId, isFavorited) => {
     if (isFavorited) {
@@ -153,6 +160,12 @@ class App extends Component {
     })
   }
 
+  favoritesWithDetails() {
+    return _.filter(this.state.meetups, (mu) => {
+      return this.state.favorites.includes(mu.id);
+    })
+  }
+
 	render() {
 		return (
 			<div>
@@ -161,9 +174,6 @@ class App extends Component {
 						<img src={meetup_logo} className="logo" alt="logo" />
 					</Bounds>
 				</Section>
-				<Section>
-          {<MyFavorites favorites={this.state.favorites} />}
-        </Section>
 
 				<Section>
 					<form onSubmit={this.handleSubmit}>
@@ -182,34 +192,65 @@ class App extends Component {
 						</div>
 					</form>
 				</Section>
-				<Section>
-					<Bounds>
-						<h1 className="text--display1 margin--bottom">
-							{this.state.query} Meetups
-						</h1>
-						{this.state.error ? (
-							<p className="text--error text--bold">
-								Looks like something went wrong…
-							</p>
-						) : (
-							''
-						)}
-						{this.state.loading ? (
-							<div className="loader">Loading...</div>
-						) : (
-							<Meetups
-								query={this.state.query}
-								error={this.state.error}
-								meetups={this.state.meetups}
+        <Section>
+          <ToggleFavoriteView onClick={this.toggleOnlyFavorites}>
+            Click here to see { this.state.showFavorites ? 'search results' : 'favorites only'}
+          </ToggleFavoriteView>
+        </Section>
+        { this.state.showFavorites ? (
+          <Section>
+            <Bounds>
+              <MyFavorites
+                favorites={this.favoritesWithDetails()}
+                toggleFavorite={this.toggleFavorite} />
+            </Bounds>
+          </Section>
+        ) : (
+        <Section>
+          <Bounds>
+            <FavoritesCount>
+              My Favorites ({this.state.favorites.length})
+            </FavoritesCount>
+
+            <h1 className="text--display1 margin--bottom">
+              {this.state.query} Meetups
+            </h1>
+            {this.state.error ? (
+              <p className="text--error text--bold">
+                Looks like something went wrong…
+              </p>
+            ) : (
+              ''
+            )}
+            {this.state.loading ? (
+              <div className="loader">Loading...</div>
+            ) : (
+              <Meetups
+                query={this.state.query}
+                error={this.state.error}
+                meetups={this.state.meetups}
                 favorites={this.state.favorites}
                 toggleFavorite={this.toggleFavorite}
-							/>
-						)}
-					</Bounds>
-				</Section>
+              />
+            )}
+          </Bounds>
+        </Section>
+      )}
 			</div>
 		);
 	}
 }
+
+const FavoritesCount = styled.div`
+  position: absolute;
+  right: 50px;
+  margin-bottom: 20px;
+`;
+FavoritesCount.DisplayName = 'FavoritesCount';
+
+const ToggleFavoriteView = styled.a`
+  color: #00a2c7;
+  padding-left: 100px;
+`;
 
 export default App;

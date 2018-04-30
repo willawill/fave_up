@@ -1,24 +1,47 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
+import React from 'react';
 import PropTypes from 'prop-types';
-import fetchJsonp from 'fetch-jsonp';
+import Meetup from './Meetup';
 
 // MyFavorites component
-class MyFavorites extends Component {
+class MyFavorites extends React.Component {
   render() {
+    const {favorites} = this.props;
+
     return (
-      <FavoritesCount>
-        My Favorites ({this.props.favorites.length})
-      </FavoritesCount>);
+      <div>
+        <h1 className="text--display1 margin--bottom">
+          My Favorites
+        </h1>
+        <div>
+          {favorites.length == 0 ? (
+            <p className="text--error text--bold">
+              You haven't favorited any event yet!
+            </p>
+          ) : (
+            favorites.map(favorite => {
+              return (
+                <Meetup
+                  id={favorite.id}
+                  name={favorite.name}
+                  url={favorite.event_url}
+                  group={favorite.group.name}
+                  key={favorite.created}
+                  time={favorite.time}
+                  rsvpCount={favorite.yes_rsvp_count}
+                  rsvpers={favorite.rsvp_sample}
+                  isFavorited={true}
+                  toggleFavorite={this.props.toggleFavorite}
+                />
+              );
+            })
+          )
+          }
+        </div>
+      </div>
+    );
+
   }
 }
-
-const FavoritesCount = styled.div`
-  text-align: right;
-  margin-right: 100px;
-`;
-
-FavoritesCount.DisplayName = 'FavoritesCount';
 
 export default MyFavorites;
 
