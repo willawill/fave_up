@@ -14,6 +14,12 @@ class MyFavorites extends React.Component {
     };
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.favorites !== this.props.favorites) {
+      this.updateFavorites();
+    }
+  }
+
   componentDidMount() {
     if (this.props.favorites.length === 0) {
       return;
