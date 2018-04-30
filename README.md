@@ -20,8 +20,20 @@
 	- Meetup ID: integer
 	- User ID: integer
 	- Added at: date time
-	- has new event? boolean
 
-### Steps
-1. Build api for index of all the favoriates
+### Api Endpoints
+1. List of all the favorite events: #get api/favorites/user_id
+2. Add a new favorite to an user: #post api/favorites { id, userId, eventId }
+3. Delete a favorite for an user: #delete api/favorite { favoriteId }
 
+### UI components
+1. Add Favorite Button.
+2. Delete favorite button.
+3. Favorite in the nav bar with a number e.g. Favorites (5).
+4. My Favorites in the nav bar.
+
+
+Improvement:
+1. Use tools like knex.js to be flexible with database
+2. Add end to end test
+3. Add flow 

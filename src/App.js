@@ -7,6 +7,8 @@ import Meetups from './components/Meetups';
 import Bounds from 'meetup-web-components/lib/layout/Bounds';
 import Section from 'meetup-web-components/lib/layout/Section';
 import Button from 'meetup-web-components/lib/forms/Button';
+import MyFavorites from './components/MyFavorites';
+import _ from 'lodash';
 
 class App extends Component {
 	constructor(props) {
@@ -16,11 +18,11 @@ class App extends Component {
 			query: 'javascript',
 			loading: false,
 			error: false,
+      favorites: []
 		};
-		this.handleSubmit = this.handleSubmit.bind(this);
-		this.fetchEvents = this.fetchEvents.bind(this);
 	}
-	fetchEvents(search_term) {
+
+	fetchEvents = (search_term) => {
 		this.setState({
 			meetups: [],
 			query: search_term,
@@ -43,15 +45,15 @@ class App extends Component {
 		fetchJsonp(apiUrl)
 			.then(response => response.json())
 			.then(json =>
-				self.setState({
-					meetups: json.results,
-					query: search_term,
-					loading: false,
-					error: false,
-				})
+        self.setState({
+          meetups: json.results,
+          query: search_term,
+          loading: false,
+          error: false,
+        })
 			)
-			.catch(ex => {
-				console.error(ex);
+			.catch(err => {
+				console.error(err);
 				self.setState({
 					meetups: [],
 					query: search_term,
@@ -60,13 +62,97 @@ class App extends Component {
 				});
 			});
 	}
+
+// TODO fix the userId
+	fetchFavorites = () => {
+    const favoritesURL = 'favorites?userId=1';
+    this.setState({
+      loading: true,
+      error: false,
+    });
+
+    fetch(favoritesURL)
+      .then(res => res.json())
+      .then(results =>
+        this.setState({
+          favorites: results['favorites'],
+          loading: false,
+          error: false
+      })
+    )
+    .catch(err => {
+      console.error(err);
+      this.setState({
+        favorites: [],
+        loading: false,
+        error: true
+      })
+    })
+  }
+
 	componentDidMount() {
-		this.fetchEvents('javascript');
+    Promise.all([
+      this.fetchEvents('javascript'),
+      this.fetchFavorites()
+    ])
 	}
-	handleSubmit(e) {
+
+	handleSubmit = (e) => {
 		e.preventDefault();
 		this.fetchEvents(document.getElementById('query').value);
 	}
+
+  toggleFavorite = (eventId, isFavorited) => {
+    if (isFavorited) {
+      this.removeFromFavorite(eventId);
+    } else {
+      this.addToFavorite(eventId);
+    }
+  }
+
+  addToFavorite(eventId) {
+    const options = {
+      method: 'post',
+      body: JSON.stringify({
+        eventId: eventId,
+        userId: '1'
+      }),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }
+
+    fetch('/favorites', options)
+      .then(res => res.json())
+      .then(result => {
+        this.setState({ favorites: _.union(this.state.favorites, [eventId]) })
+      })
+    .catch(err => {
+      console.log(err);
+    })
+  }
+
+  removeFromFavorite(eventId) {
+    const options = {
+      method: 'delete',
+      body: JSON.stringify({ userId: 1 }),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }
+    
+    fetch(`/favorites/${eventId}`, options)
+      .then(res => res.json())
+      .then(result => {
+        this.setState({ favorites: _.without(this.state.favorites, eventId) })
+      })
+    .catch(err => {
+      console.log(err);
+    })
+  }
+
 	render() {
 		return (
 			<div>
@@ -75,6 +161,10 @@ class App extends Component {
 						<img src={meetup_logo} className="logo" alt="logo" />
 					</Bounds>
 				</Section>
+				<Section>
+          {/*<MyFavorites favorites={this.state.favorites} />*/}
+        </Section>
+
 				<Section>
 					<form onSubmit={this.handleSubmit}>
 						<div className="row bounds bounds--wide">
@@ -111,6 +201,8 @@ class App extends Component {
 								query={this.state.query}
 								error={this.state.error}
 								meetups={this.state.meetups}
+                favorites={this.state.favorites}
+                toggleFavorite={this.toggleFavorite}
 							/>
 						)}
 					</Bounds>

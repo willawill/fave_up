@@ -11,7 +11,7 @@ const db = pgp(connectionString);
 
 function getAllFavorites(req, res, next) {
   const userId = parseInt(req.query.userId);
-	db.any('select * from faves where id = $1', userId)
+	db.any('select event_id from faves where id = $1', userId)
     .then(favorites => {
       res.status(200)
         .json({
@@ -27,14 +27,13 @@ function getAllFavorites(req, res, next) {
 // e.g. curl --data "eventId=2&userId=1" http://ENV/favorites
 
 function createFavorite(req, res, next) {
-  req.body.eventId = parseInt(req.body.eventId)
-  req.body.userId = parseInt(req.body.userId)
+  req.body.userId = parseInt(req.body.userId);
   db.none("INSERT into faves(event_id, user_id, created_at) VALUES(${eventId}, ${userId}, current_timestamp)", req.body)
   .then(() => {
     res.status(200)
       .json({
         status: 'success',
-        message: 'Added one favorited event for user ' + userId
+        message: 'Added one favorited event for user'
       })
   })
   .catch(err => next(err));
@@ -44,7 +43,7 @@ function createFavorite(req, res, next) {
 // e.g. curl -X DELETE -d 'userId=1' http://localhost:3001/favorites/{eventId}
 
 function removeFavorite(req, res, next) {
-  const eventId = parseInt(req.params.eventId);
+  const eventId = req.params.eventId;
   const userId = parseInt(req.body.userId);
   db.result('DELETE from faves where event_id = $1 and user_id = $2', [eventId, userId])
     .then(() => {

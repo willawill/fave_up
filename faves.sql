@@ -5,7 +5,7 @@ CREATE DATABASE faves;
 
 CREATE TABLE faves (
   ID SERIAL,
-  event_id INTEGER NOT NULL,
+  event_id character varying(255) NOT NULL,
   user_id INTEGER NOT NULL,
   created_at timestamp without time zone NOT NULL,
   PRIMARY KEY(event_id, user_id)
