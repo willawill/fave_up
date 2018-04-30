@@ -7,7 +7,7 @@ chai.use(require('chai-http'));
 const app = require('../server/index.js');
 
 describe('API endpoint /favorites', () => {
-	it('returns all the favorites for an user', (done) => {
+  it('returns all the favorites for an user', (done) => {
     chai.request(app)
       .get('/favorites?userId=2')
       .then(res => {
@@ -64,5 +64,4 @@ describe('API endpoint for removing a favorite', () => {
         expect(res).to.have.status(400)
       })
   })
-
 })

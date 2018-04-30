@@ -12,61 +12,52 @@ import MyFavorites from './components/MyFavorites';
 import _ from 'lodash';
 
 class App extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			meetups: [],
-			query: 'javascript',
-			loading: false,
-			error: false,
+  constructor(props) {
+    super(props);
+    this.state = {
+      meetups: [],
+      query: 'javascript',
+      loading: false,
+      error: false,
       favorites: [],
       showFavorites: false
-		};
-	}
+    };
+  }
 
-	fetchEvents = (search_term) => {
-		this.setState({
-			meetups: [],
-			query: search_term,
-			loading: true,
-			error: false,
-		});
+  fetchEvents = (search_term) => {
+    this.setState({
+      meetups: [],
+      query: search_term,
+      loading: true,
+      error: false,
+    });
 
-		const qs = querystring.stringify({
-			zip: '10012',
-			text: search_term,
-			fields: 'rsvp_sample',
-			page: '15',
-			key: '6752511f3291b2b182ee4d2ef312',
-			time: '1w,',
-		});
+    const qs = querystring.stringify({
+      zip: '10012',
+      text: search_term,
+      fields: 'rsvp_sample',
+      page: '15',
+      key: '6752511f3291b2b182ee4d2ef312',
+      time: '1w,',
+    });
 
-		const apiUrl = `https://api.meetup.com/2/open_events/?${qs}`;
-		const self = this;
+    const apiUrl = `https://api.meetup.com/2/open_events/?${qs}`;
+    const self = this;
 
-		fetchJsonp(apiUrl)
-			.then(response => response.json())
-			.then(json =>
+    fetchJsonp(apiUrl)
+      .then(response => response.json())
+      .then(json =>
         self.setState({
           meetups: json.results,
           query: search_term,
           loading: false,
           error: false,
         })
-			)
-			.catch(err => {
-				console.error(err);
-				self.setState({
-					meetups: [],
-					query: search_term,
-					loading: false,
-					error: true,
-				});
-			});
-	}
+      );
+  }
 
 // TODO fix the userId when there is an user system, now the userID is hardcoded to be 1.
-	fetchFavorites = () => {
+  fetchFavorites = () => {
     const favoritesURL = 'favorites?userId=1';
     this.setState({
       loading: true,
@@ -82,27 +73,26 @@ class App extends Component {
           error: false
       })
     )
-    .catch(err => {
+  }
+
+  componentDidMount() {
+    Promise.all([
+      this.fetchEvents('javascript'),
+      this.fetchFavorites()
+    ]).catch(err => {
       console.error(err);
       this.setState({
         favorites: [],
         loading: false,
         error: true
-      })
-    })
+      });
+    });
   }
 
-	componentDidMount() {
-    Promise.all([
-      this.fetchEvents('javascript'),
-      this.fetchFavorites()
-    ])
-	}
-
-	handleSubmit = (e) => {
-		e.preventDefault();
-		this.fetchEvents(document.getElementById('query').value);
-	}
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.fetchEvents(document.getElementById('query').value);
+  }
 
   toggleOnlyFavorites = () => {
     const newMode = !this.state.showFavorites;
@@ -160,32 +150,32 @@ class App extends Component {
     })
   }
 
-	render() {
-		return (
-			<div>
-				<Section>
-					<Bounds className="align--center">
-						<img src={meetup_logo} className="logo" alt="logo" />
-					</Bounds>
-				</Section>
+  render() {
+    return (
+      <div>
+        <Section>
+          <Bounds className="align--center">
+            <img src={meetup_logo} className="logo" alt="logo" />
+          </Bounds>
+        </Section>
 
-				<Section>
-					<form onSubmit={this.handleSubmit}>
-						<div className="row bounds bounds--wide">
-							<div className="row-item chunk">
-								<input
-									id="query"
-									type="text"
-									name="query"
-									placeholder="Find some Meetups..."
-								/>
-							</div>
-							<div className="row-item chunk row-item--shrink">
-								<Button className="button--primary">Search</Button>
-							</div>
-						</div>
-					</form>
-				</Section>
+        <Section>
+          <form onSubmit={this.handleSubmit}>
+            <div className="row bounds bounds--wide">
+              <div className="row-item chunk">
+                <input
+                  id="query"
+                  type="text"
+                  name="query"
+                  placeholder="Find some Meetups..."
+                />
+              </div>
+              <div className="row-item chunk row-item--shrink">
+                <Button className="button--primary">Search</Button>
+              </div>
+            </div>
+          </form>
+        </Section>
         <Section>
           <ToggleFavoriteView onClick={this.toggleOnlyFavorites}>
             Click here to see { this.state.showFavorites ? 'search results' : 'favorites only'}
@@ -230,9 +220,9 @@ class App extends Component {
           </Bounds>
         </Section>
       )}
-			</div>
-		);
-	}
+    </div>
+    );
+  }
 }
 
 const FavoritesCount = styled.div`
