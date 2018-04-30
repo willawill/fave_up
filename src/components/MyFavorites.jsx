@@ -5,27 +5,11 @@ import fetchJsonp from 'fetch-jsonp';
 
 // MyFavorites component
 class MyFavorites extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      favorites: []
-    }
-  }
-
-  componentDidMount() {
-    const favoritesURL = 'favorites/' + this.props.userID;
-
-    fetch(favoritesURL)
-      .then(response => response.json())
-      .then(json => this.setState({ favorites: json.favorites }))
-  }
-
   render() {
     return (
       <FavoritesCount>
-        My Favorites ({this.state.favorites.length})
-      </FavoritesCount>)
+        My Favorites ({this.props.favorites.length})
+      </FavoritesCount>);
   }
 }
 
@@ -34,4 +18,10 @@ const FavoritesCount = styled.div`
   margin-right: 100px;
 `;
 
+FavoritesCount.DisplayName = 'FavoritesCount';
+
 export default MyFavorites;
+
+MyFavorites.propTypes = {
+  favorites: PropTypes.array
+}

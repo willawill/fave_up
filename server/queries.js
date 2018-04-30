@@ -11,16 +11,20 @@ const db = pgp(connectionString);
 
 function getAllFavorites(req, res, next) {
   const userId = parseInt(req.query.userId);
-	db.any('select event_id from faves where id = $1', userId)
+	db.any('select event_id from faves where user_id = $1', userId)
     .then(favorites => {
       res.status(200)
         .json({
           status: 'sucess',
-          favorites: favorites,
+          favorites: ids(favorites),
           message: "Retrieved favorites for " + userId
         });
     })
     .catch(err => next(err));
+}
+
+function ids(favorites) {
+  return favorites.map((f) => f['event_id'])
 }
 
 //  Endpoint for creating a new favorite for an user

@@ -162,7 +162,7 @@ class App extends Component {
 					</Bounds>
 				</Section>
 				<Section>
-          {/*<MyFavorites favorites={this.state.favorites} />*/}
+          {<MyFavorites favorites={this.state.favorites} />}
         </Section>
 
 				<Section>

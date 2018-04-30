@@ -11,10 +11,10 @@ describe('MyFavorites', () => {
   });
 
   component = wrapper.instance();
-  
+
   describe('when the user has zeor favorites', () => {
     it('shows the empty state', () => {
-      
+      expect(wrapper.find('FavoritesCount').text()).toEqual('My Favorites (0)');
     })  
   })		
 })
