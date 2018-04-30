@@ -4,15 +4,16 @@ CREATE DATABASE faves;
 \c faves;
 
 CREATE TABLE faves (
-  ID SERIAL PRIMARY KEY,
-  event_id INTEGER,
-  user_id INTEGER,
-  created_at timestamp without time zone NOT NULL
+  ID SERIAL,
+  event_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  PRIMARY KEY(event_id, user_id)
 );
 
 CREATE TABLE users (
   ID SERIAL PRIMARY KEY,
-  memeber_id INTEGER,
+  memeber_id INTEGER NOT NULL,
   created_at timestamp without time zone NOT NULL,
   updated_at timestamp without time zone NOT NULL
 );
